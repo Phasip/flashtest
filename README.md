@@ -11,5 +11,5 @@ This is ment to identify fake devices that report an incorrect size.
 A faster test would probably be to write to the end of the device and see that the data can be retrieved.
 
 ## Usage
-./flashtest <device>
+```./flashtest <device>```
 
