@@ -29,7 +29,7 @@ static void die (const char * format, ...) {
 int main(int argc, char **argv)
 {
   time_t t,start,end;
-  int fd,i,noprompt = 0;
+  int fd,i;
   long long length;
   char buffer[BUFF_SIZE];
   unsigned int seed = (unsigned) time(&t);
@@ -45,12 +45,12 @@ int main(int argc, char **argv)
   srand(seed); 
   long long written = 0;
   time(&start);
-  long long precent = length/100;
+  long long percent = length/100;
   while (written < length) {
-      if (written > precent) {
+      if (written > percent) {
         printf(".");
         fflush(stdout);
-        precent = precent+length/100;
+        percent = percent+length/100;
       }
       //printf("written: %lld\n",written);
       for (i = 0; i < BUFF_SIZE; i+=4) {
@@ -75,12 +75,12 @@ int main(int argc, char **argv)
   srand(seed);
   time(&start);
   long long readbytes = 0;
-  precent = length/100;
+  percent = length/100;
   while (readbytes < length) {
-        if (readbytes > precent) {
+        if (readbytes > percent) {
             printf(".");
             fflush(stdout);
-            precent = precent+length/100;
+            percent = percent+length/100;
           }
           
         //printf("read: %lld\n",readbytes);

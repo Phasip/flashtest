@@ -3,8 +3,8 @@ Check if sd-cards and usb devices are fake.
 
 ## WARNING: This program completely erases a disk without any prompts!
 
-Trivial program that tests a sd-cards and usb sticks by first completely filling
-it with random data and then attempting to read back that data.
+Trivial program that tests sd-cards and usb sticks by first completely filling
+a device with random data and then attempting to read back that data.
 
 This is ment to identify fake devices that report an incorrect size.
 
