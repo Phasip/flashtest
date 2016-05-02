@@ -33,7 +33,18 @@ int main(int argc, char **argv)
   long long length;
   char buffer[BUFF_SIZE];
   unsigned int seed = (unsigned) time(&t);
-  char *device = argv[1];
+  char *device;
+  int die_at_error = 1;
+  if (argc == 3 && !strcmp(argv[1],"--print-range")) {
+    die_at_error = 0;
+    device =  argv[2];
+  } else if (argc == 2) {
+    device = argv[1];
+  } else {
+    die("Usage: ./%s [--print-range] device",argv[0]);
+  }
+  
+  
   
   fd=open(device,O_WRONLY);
   if (fd < 0) die("Failed to open device!");
@@ -75,10 +86,12 @@ int main(int argc, char **argv)
   srand(seed);
   time(&start);
   long long readbytes = 0;
+  long long failstart = -1;
+  long long failend = -1;
   percent = length/100;
   while (readbytes < length) {
         if (readbytes > percent) {
-            printf(".");
+            printf(failstart==-1?".":",");
             fflush(stdout);
             percent = percent+length/100;
           }
@@ -89,7 +102,14 @@ int main(int argc, char **argv)
         if (l < 0) die("\nFailed to read from device");
         if (l != BUFF_SIZE && readbytes != length) die("\nFailed to read full int");
         for (i = 0; i < BUFF_SIZE; i+=4) {
-            if (*((unsigned int*) &buffer[i]) != rand()) die("\nFailed to validate byte %lld",readbytes-l+i);
+            if (*((unsigned int*) &buffer[i]) != rand()) {
+              if (failstart == -1) failstart = readbytes-l+i;
+              if (die_at_error) die("\nFailed to validate byte %lld",readbytes-l+i);
+            } else if (failstart != -1) {
+              failend = readbytes-l+i;
+              printf("\nFail at range: %lld-%lld\n",failstart,failend);
+              failstart = -1;
+            }
         }
         
   }

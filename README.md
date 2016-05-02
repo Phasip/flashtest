@@ -11,5 +11,7 @@ This is ment to identify fake devices that report an incorrect size.
 A faster test would probably be to write to the end of the device and see that the data can be retrieved.
 
 ## Usage
-```./flashtest <device>```
+```./flashtest [--print-range] <device>```
 
+By default the test exits as soon as a read fails. With --print-range 
+the test continues and tries to read the whole device, printing the failing ranges.
